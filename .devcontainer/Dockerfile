@@ -1,16 +1,31 @@
-FROM mcr.microsoft.com/devcontainers/python:3
+FROM continuumio/miniconda3:latest
 
-# Install TA-Lib
-RUN apt-get update && apt-get install -y build-essential wget
-RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
-    tar -xzf ta-lib-0.4.0-src.tar.gz && \
-    cd ta-lib/ && \
-    ./configure --prefix=/usr && \
-    make && \
-    make install && \
-    cd .. && \
-    rm -rf ta-lib ta-lib-0.4.0-src.tar.gz
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    git \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file and install Python dependencies
-COPY requirements.txt /tmp/
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+# Copy environment files
+COPY environment.yml /tmp/environment.yml
+COPY requirements.txt /tmp/requirements.txt
+
+# Create conda environment from environment.yml
+RUN conda env create -f /tmp/environment.yml && \
+    conda clean -afy
+
+# Make the conda environment the default
+RUN echo "conda activate finmath" >> ~/.bashrc && \
+    echo "PATH=/opt/conda/envs/finmath/bin:$PATH" >> ~/.bashrc
+
+# Add a verification script that will run during container startup
+RUN echo '#!/bin/bash\necho "Testing TA-Lib installation..."\nsource /opt/conda/etc/profile.d/conda.sh && conda activate finmath && python -c "import talib; print(\"TA-Lib version:\", talib.get_version())" || echo "TA-Lib import failed"\necho "Environment setup complete!"\n' > /usr/local/bin/verify-environment.sh && \
+    chmod +x /usr/local/bin/verify-environment.sh
+
+# Set the default workspace location
+WORKDIR /workspaces
+
+# Run verification script during container startup
+ENTRYPOINT ["/bin/bash", "-c", "source /opt/conda/etc/profile.d/conda.sh && conda activate finmath && /usr/local/bin/verify-environment.sh && exec \"$@\"", "--"]
+CMD ["bash"]
