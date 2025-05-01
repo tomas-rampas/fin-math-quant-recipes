@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy environment files
-COPY environment.yml /tmp/environment.yml
+COPY .devcontainer/environment.yml /tmp/environment.yml
 COPY requirements.txt /tmp/requirements.txt
 
 # Create conda environment from environment.yml
