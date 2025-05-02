@@ -1,3 +1,10 @@
+# syntax=docker/dockerfile:1.4
+
+# Accept GitHub token for authentication with GHCR
+ARG GITHUB_TOKEN=""
+# The build will work even if no token is provided
+# Just without using cached layers from GHCR
+
 FROM continuumio/miniconda3:latest
 
 # Install system dependencies

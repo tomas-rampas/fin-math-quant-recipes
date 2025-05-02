@@ -2,7 +2,12 @@
   "name": "FinMath Python Environment",
   "build": {
     "dockerfile": "Dockerfile",
-    "context": ".."
+    "context": "..",
+    "args": {
+      // Pass GitHub token for GHCR authentication if available
+      // This will work in both local development and GitHub Codespaces
+      "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}${localEnv:CODESPACES_GITHUB_TOKEN}"
+    }
   },
   "customizations": {
     "vscode": {

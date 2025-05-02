@@ -19,6 +19,13 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+        
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and run dev container
         uses: devcontainers/ci@v0.3
@@ -26,6 +33,8 @@ jobs:
           # Use the repository name as the image name
           imageName: ghcr.io/${{ github.repository }}/finmath-dev-container
           push: never
+          # Use cache from GitHub Container Registry
+          cacheFrom: ghcr.io/${{ github.repository }}/finmath-dev-container:latest
           runCmd: |
             # Verify the conda environment is properly set up
             conda --version

@@ -139,4 +139,23 @@ This project includes a development container configuration that provides a cons
    - The container will be stopped automatically
    - You can also manually stop the container from Docker Desktop
 
+### GitHub Container Registry Authentication (Optional)
+
+This repository uses GitHub Container Registry (GHCR) to cache container images for faster builds:
+
+1. **How It Works**:
+   - In GitHub Codespaces: Authentication happens automatically
+   - In GitHub Actions: The workflow authenticates with GHCR using repository secrets
+   - For local development: You can provide a GitHub token
+
+2. **Setting Up Local Authentication** (for faster builds):
+   - Generate a GitHub Personal Access Token with `read:packages` permission
+   - Set it as an environment variable in VS Code settings or a local `.env` file
+   - See detailed instructions in [.devcontainer/README.md](.devcontainer/README.md)
+
+3. **Fallback Behavior**:
+   - If no token is available, the container will still build successfully
+   - It just won't use cached layers, so the first build may take longer
+   - Subsequent builds within the same session will be faster due to local Docker caching
+
 This setup ensures everyone working on the project has identical dependencies and configuration, eliminating "works on my machine" issues, whether working locally or in the cloud.
