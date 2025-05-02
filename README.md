@@ -1,6 +1,6 @@
 # Financial Mathematics in Algorithmic Trading
 
-[![DevContainer & Jupyter Notebook Tests](https://github.com/tomas-rampas/fin-math-quant-recipes/actions/workflows/notebook-tests.yml/badge.svg)](https://github.com/USERNAME/REPO/actions/workflows/notebook-tests.yml) [![Made with Jupyter](https://img.shields.io/badge/Made%20with-Jupyter-orange?style=flat&logo=Jupyter)](https://jupyter.org/try) [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DevContainer & Jupyter Notebook Tests](https://github.com/tomas-rampas/fin-math-quant-recipes/actions/workflows/notebook-tests.yml/badge.svg)](https://github.com/tomas-rampas/fin-math-quant-recipes/actions/workflows/notebook-tests.yml) [![Made with Jupyter](https://img.shields.io/badge/Made%20with-Jupyter-orange?style=flat&logo=Jupyter)](https://jupyter.org/try) [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Financial mathematics is the application of mathematical methods to financial markets and investment decision-making. It combines mathematical models, statistical analysis, and computational techniques to understand market behavior, price financial instruments, and optimize investment strategies.
 
