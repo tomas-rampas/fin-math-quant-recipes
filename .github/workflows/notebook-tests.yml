@@ -1,0 +1,84 @@
+name: Jupyter Notebook Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  test-devcontainer-and-notebooks:
+    name: Test DevContainer & Jupyter Notebooks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and run dev container
+        uses: devcontainers/ci@v0.3
+        with:
+          # Use the repository name as the image name
+          imageName: ghcr.io/${{ github.repository }}/finmath-dev-container
+          push: never
+          runCmd: |
+            # Verify the conda environment is properly set up
+            conda --version
+            conda env list
+            echo "Verifying TA-Lib installation..."
+            python -c "import talib; print('TA-Lib version:', talib.get_version())"
+            
+            # Verify other critical packages
+            echo "Verifying YFinance installation..."
+            python -c "import yfinance; print('YFinance version:', yfinance.__version__)"
+            
+            # Install nbconvert for notebook execution testing
+            pip install nbconvert testbook
+
+            # Create directories for the test results
+            mkdir -p /tmp/notebook-test-results
+            mkdir -p /tmp/notebook-test-failures
+            
+            # Run all notebooks and capture results
+            echo "Running notebook tests..."
+            
+            # Initialize test status variables
+            PASSED_COUNT=0
+            FAILED_COUNT=0
+            FAILED_NOTEBOOKS=""
+            
+            # Loop through all notebooks in the jupiters directory
+            for nb in jupiters/*.ipynb; do
+              echo "Testing $nb..."
+              
+              # Execute the notebook and convert to HTML with timestamps
+              if jupyter nbconvert --to html --execute --output-dir=/tmp/notebook-test-results --ExecutePreprocessor.timeout=900 "$nb"; then
+                echo "✅ Successfully executed $nb"
+                PASSED_COUNT=$((PASSED_COUNT+1))
+              else
+                echo "❌ Error executing $nb"
+                FAILED_COUNT=$((FAILED_COUNT+1))
+                FAILED_NOTEBOOKS="$FAILED_NOTEBOOKS\n  - $nb"
+                
+                # Save the failed notebook for inspection
+                cp "$nb" "/tmp/notebook-test-failures/$(basename $nb)"
+              fi
+            done
+            
+            # Print test summary
+            echo "====== TEST SUMMARY ======"
+            echo "Notebooks executed: $((PASSED_COUNT+FAILED_COUNT))"
+            echo "✅ Passed: $PASSED_COUNT"
+            echo "❌ Failed: $FAILED_COUNT"
+            
+            if [ $FAILED_COUNT -gt 0 ]; then
+              echo -e "Failed notebooks:$FAILED_NOTEBOOKS"
+              exit 1
+            fi
+            
+            echo "All notebook tests completed successfully!"
