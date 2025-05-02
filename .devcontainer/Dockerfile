@@ -20,7 +20,7 @@ RUN echo "conda activate finmath" >> ~/.bashrc && \
     echo "PATH=/opt/conda/envs/finmath/bin:$PATH" >> ~/.bashrc
 
 # Add a verification script that will run during container startup
-RUN echo '#!/bin/bash\necho "Testing TA-Lib installation..."\nsource /opt/conda/etc/profile.d/conda.sh && conda activate finmath && python -c "import talib; print(\"TA-Lib version:\", talib.get_version())" || echo "TA-Lib import failed"\necho "Environment setup complete!"\n' > /usr/local/bin/verify-environment.sh && \
+RUN echo '#!/bin/bash\necho "Testing TA-Lib installation..."\nsource /opt/conda/etc/profile.d/conda.sh && conda activate finmath && python -c "import talib; print(\"TA-Lib version:\", talib.__ta_version__)" || echo "TA-Lib import failed"\necho "Environment setup complete!"\n' > /usr/local/bin/verify-environment.sh && \
     chmod +x /usr/local/bin/verify-environment.sh
 
 # Set the default workspace location

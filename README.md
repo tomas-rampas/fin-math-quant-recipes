@@ -69,7 +69,7 @@ This project includes a development container configuration that provides a cons
 3. **Verification**:
    - Once loaded, open a terminal in Codespaces
    - Run `conda env list` to confirm the finmath environment is active
-   - Run `python -c "import talib, yfinance; print(f'TA-Lib: {talib.get_version()}, YFinance: {yfinance.__version__}')"` to verify key packages
+   - Run `python -c "import talib, yfinance; print(f'TA-Lib: {talib.__ta_version__}, YFinance: {yfinance.__version__}')"` to verify key packages
 
 4. **Jupyter Notebooks**:
    - Open any notebook from the 'jupiters' directory
@@ -120,7 +120,7 @@ This project includes a development container configuration that provides a cons
 4. **Verification**:
    - Once the container is built and running, open a new terminal in VSCode (Terminal > New Terminal)
    - Run `conda env list` to confirm the finmath environment is active
-   - Run `python -c "import talib, yfinance; print(f'TA-Lib: {talib.get_version()}, YFinance: {yfinance.__version__}')"` to verify key packages
+   - Run `python -c "import talib, yfinance; print(f'TA-Lib: {talib.__ta_version__}, YFinance: {yfinance.__version__}')"` to verify key packages
 
 5. **Working with Jupyter Notebooks**:
    - Open any notebook from the 'jupiters' directory
