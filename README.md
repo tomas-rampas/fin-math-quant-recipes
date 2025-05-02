@@ -79,4 +79,62 @@ This project includes a development container configuration that provides a cons
    - All changes are automatically saved to your GitHub codespace
    - Commit and push changes directly from the Codespaces interface
 
-This setup ensures everyone working on the project has identical dependencies and configuration, eliminating "works on my machine" issues.
+### Running the Dev Container Locally with VSCode and Docker Desktop
+
+#### Prerequisites
+
+1. **Install Docker Desktop**:
+   - Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+   - Ensure Docker is running on your system
+
+2. **Install VSCode**:
+   - Download and install [Visual Studio Code](https://code.visualstudio.com/)
+   
+3. **Install Required VSCode Extensions**:
+   - Open VSCode
+   - Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+#### Setup and Run
+
+1. **Clone the Repository**:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+
+2. **Open in VSCode**:
+   - Open VSCode
+   - Go to File > Open Folder and select the cloned repository folder
+   - VSCode will detect the .devcontainer configuration
+   - You should see a notification in the bottom right corner asking if you want to reopen the folder in a container
+   - Click "Reopen in Container"
+   - Alternatively, you can press F1, type "Remote-Containers: Reopen in Container" and press Enter
+
+3. **Wait for Container Build**:
+   - VSCode will build the container according to the Dockerfile and devcontainer.json
+   - This process may take several minutes for the initial build
+   - The status is shown in the bottom right corner of VSCode
+
+4. **Verification**:
+   - Once the container is built and running, open a new terminal in VSCode (Terminal > New Terminal)
+   - Run `conda env list` to confirm the finmath environment is active
+   - Run `python -c "import talib, yfinance; print(f'TA-Lib: {talib.get_version()}, YFinance: {yfinance.__version__}')"` to verify key packages
+
+5. **Working with Jupyter Notebooks**:
+   - Open any notebook from the 'jupiters' directory
+   - VSCode will automatically use the finmath environment
+   - If prompted, select the 'finmath' kernel
+   - All dependencies should be available for import and use
+
+6. **Development Workflow**:
+   - All files in the repository are mounted into the container
+   - Changes you make are automatically saved to your local filesystem
+   - You can use git commands in the terminal within the container
+   - All VSCode extensions specified in devcontainer.json are automatically installed
+
+7. **Stopping the Container**:
+   - When you're done working, you can close VSCode
+   - The container will be stopped automatically
+   - You can also manually stop the container from Docker Desktop
+
+This setup ensures everyone working on the project has identical dependencies and configuration, eliminating "works on my machine" issues, whether working locally or in the cloud.
