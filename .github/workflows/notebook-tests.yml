@@ -31,14 +31,15 @@ jobs:
             conda --version
             conda env list
             echo "Verifying TA-Lib installation..."
-            python -c "import talib; print('TA-Lib version:', talib.get_version())"
+            conda run -n finmath python -c "import talib; print('TA-Lib version:', talib.get_version())"
             
             # Verify other critical packages
             echo "Verifying YFinance installation..."
-            python -c "import yfinance; print('YFinance version:', yfinance.__version__)"
+            conda run -n finmath python -c "import yfinance; print('YFinance version:', yfinance.__version__)"
             
-            # Install nbconvert for notebook execution testing
-            pip install nbconvert testbook
+            # Install nbconvert for notebook execution testing using conda to avoid root user pip warning
+            conda install -y -n finmath -c conda-forge nbconvert
+            conda run -n finmath pip install testbook
 
             # Create directories for the test results
             mkdir -p /tmp/notebook-test-results
@@ -56,8 +57,8 @@ jobs:
             for nb in jupiters/*.ipynb; do
               echo "Testing $nb..."
               
-              # Execute the notebook and convert to HTML with timestamps
-              if jupyter nbconvert --to html --execute --output-dir=/tmp/notebook-test-results --ExecutePreprocessor.timeout=900 "$nb"; then
+              # Execute the notebook and convert to HTML with timestamps using conda environment
+              if conda run -n finmath jupyter nbconvert --to html --execute --output-dir=/tmp/notebook-test-results --ExecutePreprocessor.timeout=900 "$nb"; then
                 echo "✅ Successfully executed $nb"
                 PASSED_COUNT=$((PASSED_COUNT+1))
               else
