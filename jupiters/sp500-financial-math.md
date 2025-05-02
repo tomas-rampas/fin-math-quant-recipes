@@ -193,7 +193,7 @@ from arch import arch_model
 import yfinance as yf
 
 # Get S&P 500 data
-sp500 = yf.download('^GSPC', start='2020-01-01')
+sp500 = yf.download('^GSPC', auto_adjust=False, start='2020-01-01')
 returns = 100 * sp500['Close'].pct_change().dropna()
 
 # Fit GARCH(1,1) model
@@ -228,7 +228,7 @@ import matplotlib.pyplot as plt
 import yfinance as yf
 
 # Get S&P 500 data
-sp500 = yf.download('^GSPC', start='2020-01-01')
+sp500 = yf.download('^GSPC', auto_adjust=False, start='2020-01-01')
 
 # Calculate RSI
 def calculate_rsi(prices, period=14):
@@ -291,7 +291,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
 
 # Get S&P 500 data
-sp500 = yf.download('^GSPC', start='2018-01-01')
+sp500 = yf.download('^GSPC', auto_adjust=False, start='2018-01-01')
 
 # Feature engineering
 sp500['Returns'] = sp500['Close'].pct_change()
