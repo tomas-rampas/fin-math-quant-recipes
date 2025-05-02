@@ -31,7 +31,7 @@ jobs:
             conda --version
             conda env list
             echo "Verifying TA-Lib installation..."
-            conda run -n finmath python -c "import talib; print('TA-Lib version:', talib.get_version())"
+            conda run -n finmath python -c "import talib; print('TA-Lib version:', talib.__ta_version__)"
             
             # Verify other critical packages
             echo "Verifying YFinance installation..."
