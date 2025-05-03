@@ -12,6 +12,7 @@ yfinance>=0.2.40
 statsmodels>=0.13.0
 scikit-learn>=1.0.0
 arch>=5.0.0
+statsforecast>=2.0.0
 
 # Technical analysis and other financial tools
 ta-lib>=0.4.0
